@@ -1,0 +1,93 @@
+version: '3'
+
+services:
+  db:
+    image: oceanbase/oceanbase-ce:4.2.1_bp1_hf1
+    restart: always
+    ports:
+      - ${MYSQL_PORT}:2881
+    environment:
+      MODE: slim
+      OB_ROOT_PASSWORD: ${MYSQL_PWD}
+      OB_TENANT_NAME: ${MYSQL_TENANT}
+      OB_TENANT_LOWER_CASE_TABLE_NAMES: 0
+    volumes:
+      - ./conf/init/oceanbase:/root/boot/init.d
+      - ./mnt/data/oceanbase/ob:/root/ob
+      - ./mnt/data/oceanbase/obd:/root/.obd
+# - ./init/db:/root/boot/init.d
+#   mc:
+#     container_name: i18n-mc
+#     image: docker.dragonflydb.io/dragonflydb/dragonfly
+#     restart: always
+#     ulimits:
+#       memlock: -1
+#     ports:
+#       - ${MC_PORT}:6379
+#     volumes:
+#       - ./cache/mc:/data
+#     command: >
+#       -dbnum 1
+#       -hz ${MC_HZ}
+#       --cache_mode=true
+#       --save_schedule "*:30"
+#       --requirepass ${MC_PASSWORD}
+#       --keys_output_limit=8192
+#       --proactor_threads=${MC_THREADS}
+#       --maxmemory=${MC_MAXMEMORY}
+#   pg:
+#     container_name: i18n-pg
+#     image: xxai/postgres
+#     volumes:
+#       - ./data/pg:/var/lib/postgresql/data
+#       - ./backup/pg:/backup/pg
+#       - ./log/pgbackrest:/var/log/pgbackrest
+#       - ./log/pg:/log
+#       - ./conf/pgbackrest:/etc/pgbackrest
+#     restart: always
+#     environment:
+#       POSTGRES_DB: ${PG_DB}
+#       POSTGRES_PASSWORD: ${PG_PASSWORD}
+#       POSTGRES_USER: ${PG_USER}
+#       PGPORT: ${PG_PORT}
+#     ports:
+#       - ${PG_PORT}:${PG_PORT}
+#     command: >
+#       postgres
+#       -c max_wal_senders=3 -c log_timezone=PRC
+#       -c min_wal_size=80MB -c archive_mode=on -c max_wal_size=8GB
+#       -c max_worker_processes=10 -c max_parallel_workers=10 -c max_connections=128
+#       -c effective_io_concurrency=256 -c random_page_cost=1.1
+#       -c maintenance_work_mem=128MB
+#       -c checkpoint_completion_target=0.9
+#       -c shared_buffers=512MB -c effective_cache_size=1536MB
+#       -c logging_collector=on -c wal_compression=zstd
+#       -c default_toast_compression=lz4 -c wal_level=logical
+#       -c synchronous_commit=off
+# # -c cron.use_background_workers=off
+# # -c cron.timezone='UTC+8'
+# # -c cron.database_name=$PG_DB
+# # -c shared_preload_libraries='pg_cron'
+#   kv:
+#     restart: always
+#     container_name: i18n-kv
+#     mem_limit: 1G
+#     image: apache/kvrocks:nightly
+#     entrypoint: >
+#       kvrocks
+#       -c /var/lib/kvrocks/kvrocks.conf
+#       --bind "0.0.0.0"
+#       --pidfile /var/run/kvrocks/kvrocks.pid
+#       --requirepass ${R_PASSWORD}
+#       --workers ${R_WORKERS}
+#       --log /log
+#       --dir /data
+#       --timeout 360
+#       --rocksdb.compression zstd
+#       --rocksdb.enable_blob_files yes
+#       --rocksdb.read_options.async_io yes
+#     volumes:
+#       - ./data/kv:/data
+#       - ./log/kv:/log
+#     ports:
+#       - ${R_PORT}:6666

@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  kv:
+    image:  redis:7.2
+    restart: always
+    command: >
+      /redis.conf
+      --requirepass ${R_PASSWORD}
+    volumes:
+      - ./conf/redis.conf:/redis.conf
+      - ./mnt/data/redis:/data
+    ports:
+      - ${R_PORT}:6379

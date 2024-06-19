@@ -1,0 +1,4 @@
+/docker-compose.yml
+/mnt/
+node_modules/
+.env

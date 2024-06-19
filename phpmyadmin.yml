@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+
+  dbui:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 7781:80
+    volumes:
+      - ./mnt/cache/phpmyadmin/session/:/sessions/
+      - ./conf/phpmyadmin.config.php:/etc/phpmyadmin/config.user.inc.php
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

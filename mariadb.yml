@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  db:
+    build:
+      context: ./conf/mariadb
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - ${MYSQL_PORT}:3306
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_PASSWORD: ${MYSQL_PWD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PWD}
+      MYSQL_USER: ${MYSQL_USER}
+    volumes:
+      - ./mnt/backup/mariadb:/backup
+      - ./mnt/data/mariadb:/var/lib/mysql
+      - ./conf/mariadb/conf/mariadb.cnf:/etc/mysql/conf.d/mariadb.cnf
+      - ./conf/mariadb/conf:/etc/mysql/conf
+      - ./conf/mariadb/init:/docker-entrypoint-initdb.d

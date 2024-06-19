@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+
+  db:
+    image: percona/percona-server:8.2.0-1
+    restart: always
+    ports:
+      - ${MYSQL_PORT}:3306
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_PASSWORD: ${MYSQL_PWD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PWD}
+      MYSQL_USER: ${MYSQL_USER}
+      INIT_ROCKSDB: 1
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+    volumes:
+      - ./mnt/backup/percona:/backup
+      - ./mnt/data/percona:/var/lib/mysql
+      - ./conf/init/percona/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./conf/percona/site.cnf:/etc/my.cnf.d/site.cnf
+      - ./conf/percona/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./conf/percona/rocksdb.cnf:/rocksdb.cnf

@@ -1,0 +1,10 @@
+[mysqld]
+collation-server=binary
+character-set-server=binary
+default-tmp-storage-engine=MyISAM
+lower_case_table_names=0
+log_replica_updates
+binlog_format=MIXED
+transaction-isolation=READ-COMMITTED
+authentication_policy=mysql_native_password
+

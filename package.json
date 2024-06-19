@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@3-/jsext": "^0.0.5",
+    "zx": "^8.0.2",
+    "@3-/nt": "^0.1.2",
+    "@3-/write": "^0.0.1"
+  },
+  "devDependencies": { "@3-/loader": "^0.0.2" }
+}
