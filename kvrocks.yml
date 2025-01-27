@@ -1,0 +1,24 @@
+version: '3'
+services:
+  kv:
+    restart: always
+    container_name: i18n-kv
+    mem_limit: 2G
+    image: apache/kvrocks:latest
+    entrypoint: >
+      kvrocks -c /var/lib/kvrocks/kvrocks.conf
+      --requirepass ${R_PASSWORD}
+      --resp3-enabled yes
+      --bind "0.0.0.0"
+      --pidfile /var/run/kvrocks/kvrocks.pid
+      --dir /data
+      --timeout 360
+      --rocksdb.compression zstd
+      --rocksdb.max_open_files 1024
+      --rocksdb.enable_blob_files yes
+      --rocksdb.read_options.async_io yes
+    volumes:
+      - ./mnt/data/kvrocks:/data
+      - ./mnt/log/kvrocks:/log
+    ports:
+      - ${R_PORT}:6666
