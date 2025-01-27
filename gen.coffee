@@ -7,7 +7,7 @@
   path > join
 
 prefix = 'i18n'
-yml = """version: '3'
+yml = """
 services:"""
 
 use = load join ROOT, 'use.nt'
